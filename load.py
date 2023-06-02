@@ -1,10 +1,31 @@
-# could transfer json to sql db
+import sqlite3
 
-# create sqlite3 table schema
-# create insert logic / load all metadata
-# create update logic
-# create delete logic
-# create select_single by name logic
-# create select_many logic
-# groupby logics
-# create indexes
+
+class MetadataLoader:
+
+    def __init__(self, database_file_path):
+        self.database_file_path = database_file_path
+
+    def transfer(self, metadata_df):
+        with sqlite3.connect(self.database_file_path) as conn:
+            metadata_df.to_sql('Email', conn, if_exists='replace', index=False)
+            conn.commit()
+            print('Table sucessfully created from df!')
+
+    def add_indexes(self, table):
+        with sqlite3.connect(self.database_file_path) as conn:
+            cur = conn.cursor()
+            if table == 'Email':
+                cur.execute('''
+                    CREATE INDEX idxCol1 ON Email ("From")
+                ''')
+
+                cur.execute('''
+                    CREATE INDEX idxCol2 ON Email (Attachments)
+                ''')
+
+                conn.commit()
+                print('Indexes created!')
+
+            else:
+                raise ValueError(f'Table name with {table} does not exists!')

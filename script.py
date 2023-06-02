@@ -1,23 +1,26 @@
 import os
 import extract
 import transform
+import load
 import openai
 from tqdm import tqdm
 import pandas as pd
+import sql_logics
 
-# init openai info
+
+# openai info
 openai.api_key = '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'
 model_id = 'gpt-3.5-turbo'
 
-#---------------------------------------------------------------------
-# Extraction Logics
-url_csv ='https://storage.googleapis.com/kaggle-data-sets/55/120/compressed/emails.csv.zip?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20230529%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230529T221602Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=0bb7400d1f4f44b3fbbc60e55337efc6f6fb6e163aed50fed838fdac8c973703df4c8db9cc727fc738ecc1f92efd8f19a61f8711fcaffebe72dd90880ee4fd02db96122b2e0fee95a2cd42e7c13311ace7909f9570eb1b1faee95e34748370e295ca35b2715b173c2beb52c00c21a82295d862621baff0b486ec74435ccbccd7cb8ed97306a0c6b090f89d96ee5734ddfecc1c3d1c8ebf40f1c2f32c48869f52eb1f2a9fefa1a6e0ba5b89ab1f5e8d69da01c499cb4dc2d2f83296fbcd53e856159b1598e99b837c88b43629f7bf4c04718f6dacfaaf5f3784392827601fe42f77e9a1ed842d42d24755cf446e825f875a14b45444bc67cf3171332be636bde2'
-metadata_extractor = extract.MetadataExtractor(url_csv)
-
+'''''
+Extraction Logic Execution
+'''''
 # init input parameters
+url_csv = 'https://storage.googleapis.com/kaggle-data-sets/55/120/compressed/emails.csv.zip?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20230602%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230602T061725Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=0f0970f1bdd6fc8f602bdefdd3d2e918910ce8194816b54f975edd4cc1e3ceb7a15c716d93edca107a0e3d8c06583560da91238c876ecdd079a976bcffac99233c1ff973aecc57b39d67a1a115b61d265cd14695d07db0398e660b9447205f2b28411a4dde0c2ec11945e6551aca7ec0c8022917b3070d7ee02cf2e22bd4144626a7d4dfebeacccfa64ce403a896329f2c09f76031c845f1989afdcdb9ee74310ea68806812c6be4d85eeeb9c1df29f28bf76331cee63d1f89b6c662a449f726ab1e15b62237346fb98ac753748f368bc74e98c66777ffe784cfe0c8c91738d2da5e46a925b493e9daef0cc4305d7006289683f773c424853ccba4f655809a21'
+metadata_extractor = extract.MetadataExtractor(url_csv)
 metadata_lst = []
 num_samples = 10
-random_state = 7
+random_state = 42
 file_path_email = './saved_df/email_df'
 file_path_metadata = './saved_metadata/metadata_lst'
 
@@ -47,8 +50,10 @@ else:
         metadata_lst.append(metadata)
     metadata_extractor.save_data(metadata_lst, file_path_metadata)
 
-#---------------------------------------------------------------------
-# Transformation Logics
+
+'''''
+Transformation Logic Execution
+'''''
 metadata_cols = ['MessageID', 'Date', 'From', 'To', 'Cc', 'Bcc', 'Subject', 'MimeVersion',
                  'ContentType', 'ContentTransferEncoding', 'Summarized Content', 'Attachments']
 metadata_df = pd.DataFrame(columns=metadata_cols)
@@ -63,8 +68,38 @@ metadata_df = metadata_transformer.convert_datetime()
 # replace null values with "None"
 metadata_df = metadata_transformer.replace_nulls()
 
-# remove punctuations
+# remove special characters
 metadata_df = metadata_transformer.remove_punctuations()
-#---------------------------------------------------------------------
 
-print(metadata_df.head())
+'''''
+Loading Logic Execution
+'''''
+file_path_db = './email_db/email.db'
+table_name = 'Email'
+metadata_loader = load.MetadataLoader(file_path_db)
+
+# create sql table from df
+metadata_loader.transfer(metadata_df)
+
+# add indexes
+metadata_loader.add_indexes(table_name)
+
+'''''
+SQL Command Execution
+'''''
+db = sql_logics.Database(file_path_db)
+
+# insert logic
+db.insert(metadata_df.iloc[7])
+
+# update logic
+db.update("Bcc", "MessageID", "jung.yae@afit.edu", "<21013688.1075844564560.JavaMail.evans@thyme>")
+
+# delete logic
+db.delete("Bcc", "None")
+
+# retrieve single logic
+db.retrieve_single("Subject", "Bcc", "jung.yae@afit.edu")
+
+# retrieve many logic
+db.retrieve_many("Subject", "Attachments", "None")
