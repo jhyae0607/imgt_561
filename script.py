@@ -19,7 +19,7 @@ metadata_lst = []
 num_samples = 10
 random_state = 7
 file_path_email = './saved_df/email_df'
-file_path_metadata = './saved_metadata/metadata_lst_insert'
+file_path_metadata = './saved_metadata/metadata_lst'
 
 # Retrieve dataset from existing file
 if os.path.exists(file_path_email):
@@ -63,6 +63,8 @@ metadata_df = metadata_transformer.convert_datetime()
 # replace null values with "None"
 metadata_df = metadata_transformer.replace_nulls()
 
+# remove punctuations
+metadata_df = metadata_transformer.remove_punctuations()
 #---------------------------------------------------------------------
 
 print(metadata_df.head())

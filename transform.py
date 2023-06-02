@@ -53,3 +53,9 @@ class MetadataTransformer:
         self.metadata_df = self.metadata_df.applymap(lambda x: re.sub(r'^\[\s*\]$', 'None', str(x)))
     
         return self.metadata_df
+
+    
+    def remove_punctuations(self):
+        self.metadata_df = self.metadata_df.replace({'\[|\]': '', "'": ''}, regex=True)
+
+        return self.metadata_df
