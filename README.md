@@ -20,10 +20,10 @@
 #### - that adds indexes for faster queries
 
 ### sql_logics.py
-#### This code contains basic sql commands that performs insert, update, delete, and select single/many
+#### -This code contains basic sql commands that performs insert, update, delete, and select single/many
 
 ### unit_test.py
-#### This code conducts unit tests on the Transform logic and the sql-command logics
+#### -This code conducts unit tests on the Transform logic and the sql-command logics
 
 ### script.py
-#### This code executes all the functions created from the above codes.
+#### -This code executes all the functions created from the above codes.
