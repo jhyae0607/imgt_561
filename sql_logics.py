@@ -5,27 +5,6 @@ class Database:
 
     def __init__(self, database_file_path):
         self.database_file_path = database_file_path
-        # self.__init__database_schema()
-
-    # def __init__database_schema(self):
-    #     with sqlite3.connect(self.database_file_path) as conn:
-    #         cur = conn.cursor()
-    #         cur.execute('''
-    #         CREATE TABLE IF NOT EXISTS Email (
-    #             MessageID TEXT NOT NULL,
-    #             Date TEXT NOT NULL,
-    #             "From" TEXT NOT NULL,
-    #             "To" TEXT NOT NULL,
-    #             Cc TEXT,
-    #             Bcc TEXT
-    #             Subject TEXT,
-    #             MimeVersion TEXT,
-    #             ContentType TEXT,
-    #             ContentTransferEncoding TEXT,
-    #             "Summarized Content" TEXT,
-    #             Attachments TEXT
-    #         )
-    #         ''')
 
     # insert logic
     def insert(self, metadata_row, table_name):

@@ -10,7 +10,10 @@ import pandas as pd
 class MetadataExtractor:
     '''Loads zipped csv from URL, unzips/converts to pandas df
     randomly subsets the df, extracts metadata using gpt-3.5,
-    saves extracted metadata into json format'''
+    saves extracted metadata into json format.
+    The .csv file must contain all the raw textual email data in
+    a single column named "message".
+    '''
 
     def __init__(self, url_csv):
         self.url_csv = url_csv
@@ -45,7 +48,7 @@ class MetadataExtractor:
 
         while retries > 0:
             message = [
-                {"role": "user", 
+                {"role": "user",
                  "content": f"Extract the following metadata in a json format (MessageID, Date, From, To, Cc, Bcc, Subject, MimeVersion, ContentType, ContentTransferEncoding, Summarized Content, Attachments) from the text below. The summarized content should be less than 4 sentences: {message}"
                  }
             ]
