@@ -6,9 +6,9 @@ class MetadataLoader:
     def __init__(self, database_file_path):
         self.database_file_path = database_file_path
 
-    def transfer(self, metadata_df):
+    def transfer(self, metadata_df, name):
         with sqlite3.connect(self.database_file_path) as conn:
-            metadata_df.to_sql('Email', conn, if_exists='replace', index=False)
+            metadata_df.to_sql(f'{name}', conn, if_exists='replace', index=False)
             conn.commit()
             print('Table sucessfully created from df!')
 

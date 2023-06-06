@@ -1,5 +1,4 @@
 import io
-import os
 import time
 import openai
 import pickle
@@ -15,7 +14,6 @@ class MetadataExtractor:
 
     def __init__(self, url_csv):
         self.url_csv = url_csv
-
 
     def extract_url(self):
         response = requests.get(self.url_csv)
@@ -37,21 +35,19 @@ class MetadataExtractor:
         
         return self.csv_df
 
-
     def random_sample(self, df, num_samples, random_state):
         self.sampled_df = df.sample(n=num_samples, random_state=random_state)
         return self.sampled_df
-    
 
     def extract_metadata(self, message):
         retries = 3
         self.metadata = None
 
         while retries > 0:
-            message=[
+            message = [
                 {"role": "user", 
-                "content": f"Extract the following metadata in a json format (MessageID, Date, From, To, Cc, Bcc, Subject, MimeVersion, ContentType, ContentTransferEncoding, Summarized Content, Attachments) from the text below. The summarized content should be less than 4 sentences: {message}"
-                }
+                 "content": f"Extract the following metadata in a json format (MessageID, Date, From, To, Cc, Bcc, Subject, MimeVersion, ContentType, ContentTransferEncoding, Summarized Content, Attachments) from the text below. The summarized content should be less than 4 sentences: {message}"
+                 }
             ]
 
             completion = openai.ChatCompletion.create(
@@ -75,12 +71,10 @@ class MetadataExtractor:
         time.sleep(60)
         return self.metadata
 
-
     def save_data(self, data, filepath):
         # save list of json files for later use
         with open(filepath, 'wb') as file:
             pickle.dump(data, file)
-
 
     def load_data(self, filepath):
         # load list of json files
