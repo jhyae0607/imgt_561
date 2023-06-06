@@ -1,5 +1,6 @@
 # imgt_561 Final Project
 ## I performed the database project using metadata extracted from raw email textual data. Below describes what each .py file is intended to do.
+## I recommend also cloning the saved_df and saved_metadata to eliminate the need to download .csv from url and extract metadata from ChatGPT.
 
 ### extract.py
 #### As an initial step in the ETL pipeline, this code contains functions:

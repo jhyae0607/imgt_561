@@ -13,7 +13,7 @@ import sql_logics as sql_logics
 os.chdir('/home/jung/Documents/data_science/23_SP/db_eeng/project/imgt_561')
 
 # openai info
-openai.api_key = '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'
+openai.api_key = 'input your OpenAI API Key here'
 model_id = 'gpt-3.5-turbo'
 
 '''''
