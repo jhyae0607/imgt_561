@@ -2,6 +2,9 @@ import sqlite3
 
 
 class MetadataLoader:
+    '''creates a table in the database by trasnferring the metadata
+    dataframe. Indexes are added for faster queries.
+    '''
 
     def __init__(self, database_file_path):
         self.database_file_path = database_file_path

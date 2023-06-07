@@ -35,7 +35,7 @@ class MetadataExtractor:
         else:
             print('Bad')
             raise Exception('Invalid Response')
-        
+
         return self.csv_df
 
     def random_sample(self, df, num_samples, random_state):

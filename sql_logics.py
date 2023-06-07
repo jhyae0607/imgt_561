@@ -2,6 +2,9 @@ import sqlite3
 
 
 class Database:
+    '''Basic SQL logics that uses INSERT, UPDATE,
+    DELETED, SELECT created.
+    '''
 
     def __init__(self, database_file_path):
         self.database_file_path = database_file_path

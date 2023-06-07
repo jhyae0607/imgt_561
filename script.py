@@ -74,9 +74,6 @@ metadata_df = metadata_transformer.convert_datetime()
 # replace null values with "None"
 metadata_df = metadata_transformer.replace_nulls()
 
-# remove special characters
-metadata_df = metadata_transformer.remove_punctuations()
-
 
 '''''
 Loading Logic Execution Examples

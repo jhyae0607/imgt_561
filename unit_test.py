@@ -24,7 +24,6 @@ class TransformerTest(unittest.TestCase):
         self.metadata_df = metadata_transformer.convert_to_df()
         self.metadata_df = metadata_transformer.convert_datetime()
         self.metadata_df = metadata_transformer.replace_nulls()
-        self.metadata_df = metadata_transformer.remove_punctuations()
         return self.metadata_df
 
     def test_datatype(self):
@@ -77,7 +76,6 @@ class SqlQueryTest(unittest.TestCase):
         self.metadata_df = metadata_transformer.convert_to_df()
         self.metadata_df = metadata_transformer.convert_datetime()
         self.metadata_df = metadata_transformer.replace_nulls()
-        self.metadata_df = metadata_transformer.remove_punctuations()
 
         # create sql table from pandas df
         metadata_loader = MetadataLoader(self.file_path_db)
